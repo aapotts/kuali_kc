@@ -19,16 +19,23 @@
 	  	<channel:messageOfTheDay/>
       <channel:researcherProposals />
       <channel:researcherAwards />
-      <channel:researcherNegotiations />
+      <!-- AAP: removed for menu cleanup -->
+      <!-- channel:researcherNegotiations /-->
 </td>
-<td class="content" valign="top">
+<!-- AAP: removed for menu cleanup -->
+<!-- td class="content" valign="top">
       <channel:researcherIRBProtocols/>
       <channel:researcherCompliance/>
       <channel:researcherIACUCProtocols/>   
-</td>
+</td -->
 
 <td class="content" valign="top">
       <channel:researcherQuicklinks />
-      <channel:researcherPersonnel />
+      <!-- AAP: removed for menu cleanup -->
+      <!-- channel:researcherPersonnel / -->
       <channel:researcherWorkflow />
+</td>
+<!-- AAP: report links -->
+<td class="content" valign="top">
+      <channel:researcherReportLinks />
 </td>

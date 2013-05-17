@@ -56,6 +56,10 @@
         <form-bean name="IacucProtocolForm" type="org.kuali.kra.iacuc.IacucProtocolForm" />
         <form-bean name="IacucProtocolOnlineReviewForm" type="org.kuali.kra.iacuc.onlinereview.IacucProtocolOnlineReviewForm"/> 
         <form-bean name="IacucProtocolCorrespondenceTemplateForm" type="org.kuali.kra.iacuc.correspondence.IacucProtocolCorrespondenceTemplateForm" />
+        
+        <!-- AAP: report form -->
+        <form-bean name="ReportForm" type="com.rsmart.kuali.kra.reporting.web.struts.form.ReportFormwardForm" />
+       
     </form-beans>
 
 <!-- Rice content Start -->
@@ -660,6 +664,11 @@
             <forward name="view" path="/WEB-INF/jsp/personmasschange/PersonMassChangeView.jsp" />
         </action>
      
+        <!-- AAP: adding report controller -->
+		<action path="/displayExternalReport" name="ReportForm" type="com.rsmart.kuali.kra.reporting.ReportForwardAction">
+            <forward name="basic" path="/reportRedirect.jsp"/>
+        </action>
+
     </action-mappings>
 
 
