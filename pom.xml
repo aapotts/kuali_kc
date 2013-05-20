@@ -174,37 +174,8 @@
 					    		<groupId>xml-apis</groupId>
 					    	</exclusion>
 					    </exclusions>
-					</dependency>    				
-					
-				    <dependency>
-				      <groupId>com.rsmart</groupId>
-				      <artifactId>jasper-tokenauth</artifactId>
-				      <version>0.9.1</version>
-						<exclusions>
-					     <exclusion>
-					       <groupId>com.jaspersoft.jasperserver</groupId>
-					       <artifactId>jasperserver-common-ws</artifactId>
-					     </exclusion>
-					     <exclusion>
-					       <groupId>com.jaspersoft.jasperserver</groupId>
-					       <artifactId>jasperserver-remote-services</artifactId>
-					     </exclusion>
-					     <exclusion>
-					       <groupId>org.springframework</groupId>
-					       <artifactId>spring-web</artifactId>
-					     </exclusion>
-					     <exclusion>
-					       <groupId>org.springframework.security</groupId>
-					       <artifactId>spring-security-core</artifactId>
-					     </exclusion>
-					     <exclusion>
-					       <groupId>log4j</groupId>
-					       <artifactId>log4j</artifactId>
-					     </exclusion>
-					   </exclusions>
-   				    </dependency>
-    
-                    </dependencies>	
+					</dependency>
+				</dependencies>				
 			</plugin>
 			<plugin>
 			    <groupId>org.apache.maven.plugins</groupId>
@@ -610,6 +581,34 @@
 	</build>
 
 	<dependencies>
+				    <dependency>
+				      <groupId>com.rsmart</groupId>
+				      <artifactId>jasper-tokenauth</artifactId>
+				      <version>0.9.1</version>
+						<exclusions>
+					     <exclusion>
+					       <groupId>com.jaspersoft.jasperserver</groupId>
+					       <artifactId>jasperserver-common-ws</artifactId>
+					     </exclusion>
+					     <exclusion>
+					       <groupId>com.jaspersoft.jasperserver</groupId>
+					       <artifactId>jasperserver-remote-services</artifactId>
+					     </exclusion>
+					     <exclusion>
+					       <groupId>org.springframework</groupId>
+					       <artifactId>spring-web</artifactId>
+					     </exclusion>
+					     <exclusion>
+					       <groupId>org.springframework.security</groupId>
+					       <artifactId>spring-security-core</artifactId>
+					     </exclusion>
+					     <exclusion>
+					       <groupId>log4j</groupId>
+					       <artifactId>log4j</artifactId>
+					     </exclusion>
+					   </exclusions>
+   				    </dependency>
+    
 		<!-- For FTP client -->
 		<dependency>
 			<groupId>commons-net</groupId>
@@ -1591,7 +1590,29 @@
 	</profiles>
 
 	<repositories>
-         <repository> 
+	    <repository>
+	      <id>rsmart-dev</id>
+	      <name>rsmart-dev</name>
+	      <url>https://nexus.rsmart.com/nexus/content/groups/public/</url>
+	      <snapshots>
+	        <enabled>true</enabled>
+	      </snapshots>
+	      <releases>
+	        <enabled>true</enabled>
+	      </releases>
+	    </repository>
+		   <repository>
+		     <id>nexus</id>
+		     <name>rsmart-dev</name>
+		     <url>https://nexus.rsmart.com/nexus/content/groups/rsmart-kuali-developers/</url>
+		     <snapshots>
+		       <enabled>true</enabled>
+		     </snapshots>
+		     <releases>
+		       <enabled>true</enabled>
+		     </releases>
+		   </repository>
+            <repository> 
             <id>kuali.nexus</id> 
             <name>Nexus Repository Manager</name> 
             <url>http://nexus.kuali.org/content/groups/public</url> 

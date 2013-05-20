@@ -22,6 +22,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.kuali.rice.kns.web.struts.action.KualiDocumentActionBase;
+import org.kuali.rice.krad.util.GlobalVariables;
+
+import com.rsmart.rfabric.jasperreports.auth.AuthTokenURLGenerator;
 
 /**
  * 
@@ -33,12 +36,12 @@ public class ReportForwardAction extends KualiDocumentActionBase {
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         
-//        AuthTokenGenerator tokenGenerator;
+        AuthTokenURLGenerator tokenURLGenerator = new AuthTokenURLGenerator();
         
-        response.sendRedirect("kr/lookup.do?methodToCall=start&businessObjectClassName=org.kuali.kra.institutionalproposal.home.InstitutionalProposal&docFormKey=88888888&includeCustomActionUrls=true&returnLocation=" 
-                + "applicationUrl" + "/mergeProposalLog.do&hideReturnLink=true");
+        String url = tokenURLGenerator.generateRelativeURL(request, "/", null, GlobalVariables.getUserSession().getPrincipalId(), true);
+        
+        response.sendRedirect(url);
         return null;
-//        return mapping.findForward("redirect");
     }    
   
     
