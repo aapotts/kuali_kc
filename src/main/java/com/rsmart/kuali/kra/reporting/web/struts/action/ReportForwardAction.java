@@ -15,12 +15,19 @@
  */
 package com.rsmart.kuali.kra.reporting.web.struts.action;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.kuali.kra.award.contacts.AwardPerson;
+import org.kuali.kra.infrastructure.Constants;
+import org.kuali.kra.proposaldevelopment.bo.ProposalPerson;
 import org.kuali.rice.kns.web.struts.action.KualiDocumentActionBase;
 import org.kuali.rice.krad.util.GlobalVariables;
 
@@ -36,13 +43,33 @@ public class ReportForwardAction extends KualiDocumentActionBase {
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         
+        String currentUserId = GlobalVariables.getUserSession().getPrincipalId();
         AuthTokenURLGenerator tokenURLGenerator = new AuthTokenURLGenerator();
-        
-        String url = tokenURLGenerator.generateRelativeURL(request, "/", null, GlobalVariables.getUserSession().getPrincipalId(), true);
+
+        String url = tokenURLGenerator.generateRelativeURL(request, "/jasperserver/viewReport.html", request.getQueryString(), currentUserId, isPrincipalInvestigator(currentUserId));
         
         response.sendRedirect(url);
         return null;
     }    
   
+    private boolean isPrincipalInvestigator(String principalId) {
+        Map<String, String> proposalKeys = new HashMap<String, String>();
+        proposalKeys.put("personId", principalId);
+        proposalKeys.put("proposalPersonRoleId", Constants.PRINCIPAL_INVESTIGATOR_ROLE);
+          
+        List<ProposalPerson> proposalPersons = (List<ProposalPerson>) getBusinessObjectService().findMatching(ProposalPerson.class, proposalKeys);
+        if (proposalPersons != null && proposalPersons.size() > 0) {
+            return true;
+        }
+        
+        Map<String, String> awardKeys = new HashMap<String, String>();
+        awardKeys.put("personId", principalId);
+        awardKeys.put("awardPersonRoleId", Constants.PRINCIPAL_INVESTIGATOR_ROLE);
+
+        List<AwardPerson> awardPersons = (List<AwardPerson>) getBusinessObjectService().findMatching(AwardPerson.class, awardKeys);
+
+        return (awardPersons != null && awardPersons.size() > 0);
+    }
+
     
 }
