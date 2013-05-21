@@ -665,7 +665,7 @@
         </action>
      
         <!-- AAP: adding report controller -->
-		<action path="/displayExternalReport" name="ReportForm" type="com.rsmart.kuali.kra.reporting.ReportForwardAction">
+		<action path="/displayExternalReport" name="ReportForm" type="com.rsmart.kuali.kra.reporting.web.struts.action.ReportForwardAction">
             <forward name="basic" path="/reportRedirect.jsp"/>
         </action>
 

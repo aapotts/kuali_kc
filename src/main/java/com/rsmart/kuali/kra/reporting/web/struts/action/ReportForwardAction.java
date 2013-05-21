@@ -25,12 +25,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.kuali.kra.award.contacts.AwardPerson;
 import org.kuali.kra.infrastructure.Constants;
+import org.kuali.kra.infrastructure.KraServiceLocator;
 import org.kuali.kra.proposaldevelopment.bo.ProposalPerson;
+import org.kuali.rice.core.api.config.property.ConfigContext;
 import org.kuali.rice.kns.web.struts.action.KualiDocumentActionBase;
 import org.kuali.rice.krad.util.GlobalVariables;
 
+import com.rsmart.rfabric.jasperreports.auth.AuthTokenGenerator;
 import com.rsmart.rfabric.jasperreports.auth.AuthTokenURLGenerator;
 
 /**
@@ -39,14 +41,29 @@ import com.rsmart.rfabric.jasperreports.auth.AuthTokenURLGenerator;
  */
 public class ReportForwardAction extends KualiDocumentActionBase {
 
+    private static final String URL_BASE = "rsmart.report.url.base";
+    private static final String QUERY_BASE = "rsmart.report.query.base";
+    private static final String SHARED_SECRET = "rsmart.report.shared.secret";
+    
     @Override
     public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response)
             throws Exception {
         
         String currentUserId = GlobalVariables.getUserSession().getPrincipalId();
+        String awardId = request.getParameter("awardId");
+        AuthTokenGenerator tokenGenerator = new AuthTokenGenerator();
+        
+        String sharedSecret = ConfigContext.getCurrentContextConfig().getProperty(SHARED_SECRET);
+        tokenGenerator.setSecret(sharedSecret);
+        
         AuthTokenURLGenerator tokenURLGenerator = new AuthTokenURLGenerator();
+        tokenURLGenerator.setTokenGenerator(tokenGenerator);
+//        AuthTokenURLGenerator tokenURLGenerator = (AuthTokenURLGenerator) KraServiceLocator.getAppContext().getBean("urlGenerator");
+        boolean isPI = isPrincipalInvestigator(currentUserId);
 
-        String url = tokenURLGenerator.generateRelativeURL(request, "/jasperserver/viewReport.html", request.getQueryString(), currentUserId, isPrincipalInvestigator(currentUserId));
+        String urlBase = ConfigContext.getCurrentContextConfig().getProperty(URL_BASE);
+        String queryBase = ConfigContext.getCurrentContextConfig().getProperty(QUERY_BASE);
+        String url = tokenURLGenerator.generateRelativeURL(request, urlBase, queryBase + awardId, currentUserId, isPI);
         
         response.sendRedirect(url);
         return null;
@@ -58,17 +75,18 @@ public class ReportForwardAction extends KualiDocumentActionBase {
         proposalKeys.put("proposalPersonRoleId", Constants.PRINCIPAL_INVESTIGATOR_ROLE);
           
         List<ProposalPerson> proposalPersons = (List<ProposalPerson>) getBusinessObjectService().findMatching(ProposalPerson.class, proposalKeys);
-        if (proposalPersons != null && proposalPersons.size() > 0) {
-            return true;
-        }
-        
-        Map<String, String> awardKeys = new HashMap<String, String>();
-        awardKeys.put("personId", principalId);
-        awardKeys.put("awardPersonRoleId", Constants.PRINCIPAL_INVESTIGATOR_ROLE);
-
-        List<AwardPerson> awardPersons = (List<AwardPerson>) getBusinessObjectService().findMatching(AwardPerson.class, awardKeys);
-
-        return (awardPersons != null && awardPersons.size() > 0);
+        return (proposalPersons != null && proposalPersons.size() > 0);
+//        if (proposalPersons != null && proposalPersons.size() > 0) {
+//            return true;
+//        }
+//        
+//        Map<String, String> awardKeys = new HashMap<String, String>();
+//        awardKeys.put("personId", principalId);
+//        awardKeys.put("proposalPersonRoleId", Constants.PRINCIPAL_INVESTIGATOR_ROLE);
+//
+//        List<AwardPerson> awardPersons = (List<AwardPerson>) getBusinessObjectService().findMatching(AwardPerson.class, awardKeys);
+//
+//        return (awardPersons != null && awardPersons.size() > 0);
     }
 
     
